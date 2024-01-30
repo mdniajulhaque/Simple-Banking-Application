@@ -19,7 +19,7 @@ export class CreateAccount {
   @Field(()=> AccountTypeEnum, {nullable:true})
   type?: AccountTypeEnum;
 
-  @Prop({type:Number,default:0})
+  @Prop({type:Number,required: true, min:500})
   @Field(() => Number,{nullable:true})
   balance?: number;
 }
