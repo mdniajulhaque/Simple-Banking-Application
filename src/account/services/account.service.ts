@@ -104,11 +104,18 @@ export class AccountService {
     withdrawAmount: number,
   ): Promise<Account> {
     try {
-      return await this.accountModel.findOneAndUpdate(
-        { number: accountNumber },
+      const updatedAccount = await this.accountModel.findOneAndUpdate(
+        { number: accountNumber, balance:{$gte:withdrawAmount + 500} }, ///here, I have considered keep minimum balance is 500 when will be withdraw
         { $inc: { balance: -withdrawAmount } },
         { new: true },
       );
+     if(!updatedAccount)
+     {
+      throw new Error("Balance is insufficient because you have to keep 500 balance to your account");
+      
+     }
+
+      return updatedAccount
     } catch (error) {
       throw new InternalServerErrorException(
         'Amount Cannot Withdraw From Account ' + error,
